@@ -38,6 +38,7 @@ export const menuNote =
 export const menuCategories = [
   {
     title: "Entrées",
+    photo: { src: "/images/plat-tartare-saumon.webp", alt: "Tartare de saumon aux noisettes et crème ciboulette" },
     items: [
       { name: "Croquettes de poulet du chef", price: "16 €" },
       { name: "Tataki de bœuf, sauce ponzu", price: "28 €" },
@@ -47,6 +48,7 @@ export const menuCategories = [
   },
   {
     title: "Plats",
+    photo: { src: "/images/plat-thon.webp", alt: "Pavé de thon mi-cuit, carottes et crème d'herbes" },
     items: [
       { name: "Magret de canard, frites, salade", price: "17 €" },
       { name: "Burger effiloché de porc", price: "19 €" },
@@ -56,11 +58,19 @@ export const menuCategories = [
   },
   {
     title: "Le midi",
+    photo: { src: "/images/plat-burrata.webp", alt: "Salade burrata, prosciutto et légumes rôtis" },
     items: [
       { name: "Menu du jour (entrée + plat ou plat + dessert)", price: "dès 15,90 €" },
       { name: "Formule complète (entrée + plat + dessert)", price: "sur demande" },
     ],
   },
+];
+
+export const dessertPhotos = [
+  { src: "/images/dessert-tiramisu.webp", alt: "Tiramisu maison, noisettes et copeaux de chocolat" },
+  { src: "/images/dessert-cheesecake-citron-vert.webp", alt: "Cheesecake au citron vert" },
+  { src: "/images/dessert-crumble-caramel.webp", alt: "Crumble caramel beurre salé" },
+  { src: "/images/dessert-agrumes-chocolat.webp", alt: "Verrine d'agrumes, chantilly et chocolat" },
 ];
 
 export const highlights = [

@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/container";
 import { CtaButton } from "@/components/cta-button";
-import { PhotoPlaceholder } from "@/components/photo-placeholder";
+import { SitePhoto } from "@/components/site-photo";
 import { SectionHeading } from "@/components/section-heading";
-import { menuCategories, menuNote, site } from "@/lib/content";
+import { dessertPhotos, menuCategories, menuNote, site } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "La carte | Les Acolytes",
@@ -30,9 +30,9 @@ export default function MenuPage() {
           {menuCategories.map((category, index) => (
             <div key={category.title} className="grid gap-8 lg:grid-cols-[1fr_1.2fr] lg:items-center">
               <div className={index % 2 === 1 ? "lg:order-2" : ""}>
-                <PhotoPlaceholder
-                  label={`Illustration — ${category.title}`}
-                  variant={index % 2 === 0 ? "gold" : "olive"}
+                <SitePhoto
+                  src={category.photo.src}
+                  alt={category.photo.alt}
                   aspect="aspect-[4/3]"
                 />
               </div>
@@ -57,7 +57,18 @@ export default function MenuPage() {
         </Container>
       </section>
 
-      <section className="bg-cream-soft py-16">
+      <section className="bg-cream-soft py-20">
+        <Container>
+          <SectionHeading eyebrow="Et pour finir" title="Nos desserts faits maison" align="center" />
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {dessertPhotos.map((photo) => (
+              <SitePhoto key={photo.src} src={photo.src} alt={photo.alt} aspect="aspect-[3/4]" />
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      <section className="bg-cream py-16">
         <Container className="flex flex-col items-center gap-6 text-center">
           <h2 className="font-display text-2xl italic text-wine sm:text-3xl">
             Envie de réserver votre table ?

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/container";
 import { CtaButton } from "@/components/cta-button";
-import { PhotoPlaceholder } from "@/components/photo-placeholder";
+import { SitePhoto } from "@/components/site-photo";
 import { SectionHeading } from "@/components/section-heading";
 import { eventTypes, site } from "@/lib/content";
 
@@ -27,7 +27,11 @@ export default function GroupesEntreprisesPage() {
 
       <section className="py-20">
         <Container className="grid gap-12 lg:grid-cols-2 lg:items-center">
-          <PhotoPlaceholder label="Salle privatisée pour un événement" variant="gold" aspect="aspect-[4/3]" />
+          <SitePhoto
+            src="/images/salle-tablees-rouges.webp"
+            alt="Salle des Acolytes dressée pour un événement, nappage rouge et chandeliers"
+            aspect="aspect-[4/3]"
+          />
           <div>
             <h2 className="font-display text-2xl italic text-wine">Une capacité sur mesure</h2>
             <div className="mt-6 grid grid-cols-3 gap-4 text-center">
@@ -85,7 +89,11 @@ export default function GroupesEntreprisesPage() {
               </CtaButton>
             </div>
           </div>
-          <PhotoPlaceholder label="Tournoi de pétanque en terrasse" variant="olive" aspect="aspect-[4/3]" />
+          <SitePhoto
+            src="/images/terrasse-moderne.webp"
+            alt="Terrasse des Acolytes aménagée, idéale pour un afterwork ou un tournoi de pétanque"
+            aspect="aspect-[4/3]"
+          />
         </Container>
       </section>
 

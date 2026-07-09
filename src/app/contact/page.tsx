@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Container } from "@/components/container";
 import { ContactForm } from "@/components/contact-form";
 import { CtaButton } from "@/components/cta-button";
-import { PhotoPlaceholder } from "@/components/photo-placeholder";
+import { SitePhoto } from "@/components/site-photo";
 import { SectionHeading } from "@/components/section-heading";
 import { openingHours, site } from "@/lib/content";
 
@@ -68,7 +68,11 @@ export default function ContactPage() {
           </div>
 
           <div className="space-y-6">
-            <PhotoPlaceholder label="Devanture des Acolytes, Oncopole" variant="wine" aspect="aspect-[4/3]" />
+            <SitePhoto
+              src="/images/hero-terrasse-olivier.webp"
+              alt="Devanture et terrasse des Acolytes, Oncopole"
+              aspect="aspect-[4/3]"
+            />
             <div className="rounded-2xl border border-ink/10 bg-cream-soft p-6 text-sm text-ink/60">
               Emplacement : 7 chemin des Silos, 31100 Toulouse — zone
               Oncopole / Zone Thibaud, à proximité de la route

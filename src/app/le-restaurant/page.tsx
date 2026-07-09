@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/container";
 import { CtaButton } from "@/components/cta-button";
-import { PhotoPlaceholder } from "@/components/photo-placeholder";
+import { SitePhoto } from "@/components/site-photo";
 import { SectionHeading } from "@/components/section-heading";
 import { site } from "@/lib/content";
 
@@ -49,15 +49,19 @@ export default function LeRestaurantPage() {
               lors de vos événements privés.
             </p>
           </div>
-          <PhotoPlaceholder label="Salle — fresque baroque & lustres" variant="wine" aspect="aspect-[4/3]" />
+          <SitePhoto
+            src="/images/salle-fresque-baroque.webp"
+            alt="Salle des Acolytes, fresque baroque et lustres à pampilles"
+            aspect="aspect-[4/3]"
+          />
         </Container>
       </section>
 
       <section className="bg-cream-soft py-20">
         <Container className="grid gap-12 lg:grid-cols-2 lg:items-center">
-          <PhotoPlaceholder
-            label="Terrasse ombragée à l'olivier"
-            variant="olive"
+          <SitePhoto
+            src="/images/hero-terrasse-olivier.webp"
+            alt="Terrasse ombragée à l'olivier, parasols rouges des Acolytes"
             aspect="aspect-[4/3]"
             className="lg:order-2"
           />
@@ -81,17 +85,23 @@ export default function LeRestaurantPage() {
       </section>
 
       <section className="py-20">
-        <Container className="text-center">
-          <SectionHeading
-            eyebrow="L'équipe"
-            title="Lucie & Adrien vous reçoivent"
-            description="Aux commandes de la maison, Lucie & Adrien mettent un point d'honneur à recevoir chaque table comme des invités, dans une ambiance conviviale et sans chichis."
-            align="center"
+        <Container className="grid gap-12 lg:grid-cols-2 lg:items-center">
+          <SitePhoto
+            src="/images/equipe-facade.webp"
+            alt="L'équipe des Acolytes devant la terrasse et son enseigne"
+            aspect="aspect-[4/3]"
           />
-          <div className="mt-10 flex justify-center">
-            <CtaButton href="/contact" variant="primary">
-              Venir nous rencontrer
-            </CtaButton>
+          <div>
+            <SectionHeading
+              eyebrow="L'équipe"
+              title="Lucie & Adrien vous reçoivent"
+              description="Aux commandes de la maison, Lucie & Adrien mettent un point d'honneur à recevoir chaque table comme des invités, dans une ambiance conviviale et sans chichis."
+            />
+            <div className="mt-8">
+              <CtaButton href="/contact" variant="primary">
+                Venir nous rencontrer
+              </CtaButton>
+            </div>
           </div>
         </Container>
       </section>

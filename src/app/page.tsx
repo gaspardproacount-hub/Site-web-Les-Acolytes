@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Container } from "@/components/container";
 import { CtaButton } from "@/components/cta-button";
-import { PhotoPlaceholder } from "@/components/photo-placeholder";
+import { SitePhoto } from "@/components/site-photo";
 import { SectionHeading } from "@/components/section-heading";
 import {
   highlights,
@@ -38,10 +38,12 @@ export default function Home() {
               </CtaButton>
             </div>
           </div>
-          <PhotoPlaceholder
-            label="Façade & terrasse ombragée des Acolytes"
-            variant="wine"
+          <SitePhoto
+            src="/images/hero-terrasse-olivier.webp"
+            alt="Terrasse ombragée des Acolytes, à l'olivier, sous les parasols rouges"
+            caption="Notre terrasse à l'olivier"
             aspect="aspect-[4/3]"
+            priority
           />
         </Container>
       </section>
@@ -66,7 +68,12 @@ export default function Home() {
 
       <section className="bg-cream-soft py-20">
         <Container className="grid gap-12 lg:grid-cols-2 lg:items-center">
-          <PhotoPlaceholder label="Assiette signature du chef" variant="gold" aspect="aspect-[4/3]" />
+          <SitePhoto
+            src="/images/plat-croquette.webp"
+            alt="Croquette de poulet du chef dressée en salle"
+            caption="Une de nos assiettes signature"
+            aspect="aspect-[4/3]"
+          />
           <div>
             <SectionHeading
               eyebrow="La carte"
