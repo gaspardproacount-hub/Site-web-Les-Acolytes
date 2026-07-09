@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/container";
 import { CtaButton } from "@/components/cta-button";
@@ -14,9 +15,18 @@ export default function Home() {
   return (
     <>
       <section className="relative overflow-hidden bg-ink text-cream">
-        <div className="bg-noise absolute inset-0 opacity-10" />
-        <Container className="relative grid gap-12 py-20 lg:grid-cols-2 lg:items-center lg:py-28">
-          <div>
+        <Image
+          src="/images/hero-plat-service.jpeg"
+          alt="Service d'un plat aux Acolytes"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-ink/35" />
+        <div className="absolute inset-0 bg-gradient-to-r from-ink/90 via-ink/55 to-ink/10" />
+        <Container className="relative py-20 lg:py-32">
+          <div className="max-w-xl">
             <span className="text-xs font-semibold uppercase tracking-[0.35em] text-gold">
               Oncopole · Toulouse
             </span>
@@ -38,13 +48,6 @@ export default function Home() {
               </CtaButton>
             </div>
           </div>
-          <SitePhoto
-            src="/images/hero-terrasse-olivier.webp"
-            alt="Terrasse ombragée des Acolytes, à l'olivier, sous les parasols rouges"
-            caption="Notre terrasse à l'olivier"
-            aspect="aspect-[4/3]"
-            priority
-          />
         </Container>
       </section>
 
