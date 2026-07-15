@@ -14,6 +14,12 @@ export const metadata: Metadata = {
     "Découvrez la carte du restaurant Les Acolytes à l'Oncopole, Toulouse : menu du jour, entrées, plats et options végétariennes.",
 };
 
+function parsePriceNumber(price: string): number | undefined {
+  const match = price.match(/[\d]+(?:[.,]\d+)?/);
+  if (!match) return undefined;
+  return Number(match[0].replace(",", "."));
+}
+
 export default async function MenuPage() {
   const cmsCatalog = await getCmsCatalog();
 
@@ -78,20 +84,27 @@ export default async function MenuPage() {
                         <span className="whitespace-nowrap font-display italic text-wine">
                           {item.price}
                         </span>
-                        {item.productId && (
-                          <CmsEditPencil payload={{ type: "edit-product", productId: item.productId }} />
-                        )}
+                        <CmsEditPencil
+                          payload={
+                            item.productId
+                              ? { type: "edit-product", productId: item.productId }
+                              : {
+                                  type: "add-product",
+                                  name: item.name,
+                                  price: parsePriceNumber(item.price),
+                                  sectionId: category.sectionId,
+                                }
+                          }
+                        />
                       </span>
                     </li>
                   ))}
-                  {category.sectionId && (
-                    <li>
-                      <CmsAddTile
-                        payload={{ type: "add-product", sectionId: category.sectionId }}
-                        label="+ Ajouter un plat dans cette rubrique"
-                      />
-                    </li>
-                  )}
+                  <li>
+                    <CmsAddTile
+                      payload={{ type: "add-product", sectionId: category.sectionId }}
+                      label="+ Ajouter un plat dans cette rubrique"
+                    />
+                  </li>
                 </ul>
               </div>
             </div>
