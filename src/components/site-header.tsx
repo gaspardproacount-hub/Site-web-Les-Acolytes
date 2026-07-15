@@ -21,7 +21,7 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-8 md:flex">
+        <nav className="hidden items-center gap-8 lg:flex">
           {navLinks.map((link) => {
             const active = pathname === link.href;
             return (
@@ -38,7 +38,7 @@ export function SiteHeader() {
           })}
         </nav>
 
-        <div className="hidden md:block">
+        <div className="hidden lg:block">
           <CtaButton href={site.reservationUrl} external variant="primary">
             Réserver une table
           </CtaButton>
@@ -49,7 +49,7 @@ export function SiteHeader() {
           aria-label="Ouvrir le menu"
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
-          className="flex h-10 w-10 flex-col items-center justify-center gap-1.5 md:hidden"
+          className="flex h-10 w-10 flex-col items-center justify-center gap-1.5 lg:hidden"
         >
           <span className={`h-px w-6 bg-ink transition-transform ${open ? "translate-y-2 rotate-45" : ""}`} />
           <span className={`h-px w-6 bg-ink transition-opacity ${open ? "opacity-0" : ""}`} />
@@ -58,7 +58,7 @@ export function SiteHeader() {
       </Container>
 
       {open && (
-        <div className="border-t border-ink/10 bg-cream md:hidden">
+        <div className="border-t border-ink/10 bg-cream lg:hidden">
           <Container className="flex flex-col gap-4 py-6">
             {navLinks.map((link) => (
               <Link
