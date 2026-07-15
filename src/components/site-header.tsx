@@ -21,58 +21,47 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-8 lg:flex">
-          {navLinks.map((link) => {
-            const active = pathname === link.href;
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`text-sm font-medium tracking-wide transition-colors hover:text-wine ${
-                  active ? "text-wine" : "text-ink/80"
-                }`}
-              >
-                {link.label}
-              </Link>
-            );
-          })}
-        </nav>
-
-        <div className="hidden lg:block">
-          <CtaButton href={site.reservationUrl} external variant="primary">
+        <div className="flex items-center gap-4">
+          <CtaButton href={site.reservationUrl} external variant="primary" className="hidden sm:inline-flex">
             Réserver une table
           </CtaButton>
-        </div>
 
-        <button
-          type="button"
-          aria-label="Ouvrir le menu"
-          aria-expanded={open}
-          onClick={() => setOpen((v) => !v)}
-          className="flex h-10 w-10 flex-col items-center justify-center gap-1.5 lg:hidden"
-        >
-          <span className={`h-px w-6 bg-ink transition-transform ${open ? "translate-y-2 rotate-45" : ""}`} />
-          <span className={`h-px w-6 bg-ink transition-opacity ${open ? "opacity-0" : ""}`} />
-          <span className={`h-px w-6 bg-ink transition-transform ${open ? "-translate-y-2 -rotate-45" : ""}`} />
-        </button>
+          <button
+            type="button"
+            aria-label="Ouvrir le menu"
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
+            className="flex h-10 w-10 flex-col items-center justify-center gap-1.5"
+          >
+            <span className={`h-px w-6 bg-ink transition-transform ${open ? "translate-y-2 rotate-45" : ""}`} />
+            <span className={`h-px w-6 bg-ink transition-opacity ${open ? "opacity-0" : ""}`} />
+            <span className={`h-px w-6 bg-ink transition-transform ${open ? "-translate-y-2 -rotate-45" : ""}`} />
+          </button>
+        </div>
       </Container>
 
       {open && (
-        <div className="border-t border-ink/10 bg-cream lg:hidden">
+        <div className="border-t border-ink/10 bg-cream">
           <Container className="flex flex-col gap-4 py-6">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => setOpen(false)}
-                className={`text-base font-medium ${
-                  pathname === link.href ? "text-wine" : "text-ink/80"
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
-            <CtaButton href={site.reservationUrl} external variant="primary" className="mt-2 w-fit">
+            {navLinks.map((link) => {
+              const active = pathname === link.href;
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setOpen(false)}
+                  className={`text-base font-medium ${active ? "text-wine" : "text-ink/80"}`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+            <CtaButton
+              href={site.reservationUrl}
+              external
+              variant="primary"
+              className="mt-2 w-fit sm:hidden"
+            >
               Réserver une table
             </CtaButton>
           </Container>
