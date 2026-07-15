@@ -6,7 +6,7 @@ const CMS_CONFIG = {
   supabaseUrl: "https://kekjsyqakhpuzxxeralm.supabase.co",
   supabaseAnonKey:
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtla2pzeXFha2hwdXp4eGVyYWxtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQwNDgwNDAsImV4cCI6MjA5OTYyNDA0MH0.vZdboaaVCYThBNH4zXGrb8gEYXwzmk5uHCoPiLFXhUI",
-  siteId: "VOTRE_SITE_ID",
+  siteId: "380c8c80-0cb6-4374-8684-ea40ad6825f2",
 };
 
 const isConfigured =
