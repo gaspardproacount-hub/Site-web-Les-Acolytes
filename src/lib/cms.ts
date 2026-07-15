@@ -76,18 +76,33 @@ export async function getCmsSiteSettings(): Promise<CmsSiteSettings | null> {
 }
 
 export async function getCmsCatalog(): Promise<CmsCatalogSection[] | null> {
-  const sections = await fetchFromCms<{ id: string; name: string; position: number }>(
-    "catalog_sections",
-    "&select=*&order=position.asc"
-  );
-  if (!sections || !sections.length) return null;
+  const [sections, products] = await Promise.all([
+    fetchFromCms<{ id: string; name: string; position: number }>(
+      "catalog_sections",
+      "&select=*&order=position.asc"
+    ),
+    fetchFromCms<CmsProduct>("products", "&select=*&order=position.asc"),
+  ]);
 
-  const products = await fetchFromCms<CmsProduct>("products", "&select=*&order=position.asc");
+  const hasSections = Boolean(sections && sections.length);
+  const hasProducts = Boolean(products && products.length);
+  if (!hasSections && !hasProducts) return null;
 
-  return sections.map((section) => ({
+  const result: CmsCatalogSection[] = (sections ?? []).map((section) => ({
     ...section,
     products: (products ?? []).filter((p) => p.section_id === section.id),
   }));
+
+  // Produits pas encore rattachés à une rubrique : on les montre quand même,
+  // sinon ils resteraient invisibles sur le site tant qu'aucune rubrique
+  // n'existe (c'était le bug : le catalogue entier disparaissait si
+  // catalog_sections était vide, même avec des produits déjà créés).
+  const unassigned = (products ?? []).filter((p) => !p.section_id);
+  if (unassigned.length) {
+    result.push({ id: "unassigned", name: "Autres plats", position: result.length, products: unassigned });
+  }
+
+  return result;
 }
 
 export async function getCmsPageBlocks(slug: string): Promise<CmsPageBlock[] | null> {
