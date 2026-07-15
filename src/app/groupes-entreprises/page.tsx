@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Container } from "@/components/container";
 import { CtaButton } from "@/components/cta-button";
 import { SitePhoto } from "@/components/site-photo";
 import { SectionHeading } from "@/components/section-heading";
 import { eventTypes as staticEventTypes, site } from "@/lib/content";
 import { getCmsPageBlocks } from "@/lib/cms";
+import { CmsEditPencil, CmsAddTile } from "@/components/cms-edit";
 
 export const metadata: Metadata = {
   title: "Groupes & entreprises | Les Acolytes",
@@ -14,9 +16,12 @@ export const metadata: Metadata = {
 
 export default async function GroupesEntreprisesPage() {
   const cmsBlocks = await getCmsPageBlocks("groupes-entreprises");
-  const eventTypes = cmsBlocks ? cmsBlocks.map((block) => block.heading) : staticEventTypes;
+  const eventTypes = cmsBlocks
+    ? cmsBlocks.map((block) => ({ label: block.heading, blockId: block.id as string | undefined }))
+    : staticEventTypes.map((label) => ({ label, blockId: undefined as string | undefined }));
 
   return (
+    <Suspense fallback={null}>
     <>
       <section className="bg-wine py-16 text-cream">
         <Container>
@@ -67,12 +72,19 @@ export default async function GroupesEntreprisesPage() {
           <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {eventTypes.map((event) => (
               <div
-                key={event}
-                className="rounded-xl border border-ink/10 bg-white/70 p-5 text-center font-medium text-ink/85"
+                key={event.label}
+                className="relative rounded-xl border border-ink/10 bg-white/70 p-5 text-center font-medium text-ink/85"
               >
-                {event}
+                {event.blockId && (
+                  <CmsEditPencil
+                    payload={{ type: "edit-block", blockId: event.blockId }}
+                    className="absolute right-2 top-2"
+                  />
+                )}
+                {event.label}
               </div>
             ))}
+            <CmsAddTile payload={{ type: "add-block" }} label="+ Ajouter une formule" />
           </div>
         </Container>
       </section>
@@ -119,5 +131,6 @@ export default async function GroupesEntreprisesPage() {
         </Container>
       </section>
     </>
+    </Suspense>
   );
 }

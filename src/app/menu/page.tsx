@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Container } from "@/components/container";
 import { CtaButton } from "@/components/cta-button";
 import { SitePhoto } from "@/components/site-photo";
 import { SectionHeading } from "@/components/section-heading";
+import { CmsEditPencil, CmsAddTile } from "@/components/cms-edit";
 import { dessertPhotos, menuCategories as staticMenuCategories, menuNote, site } from "@/lib/content";
 import { getCmsCatalog } from "@/lib/cms";
 
@@ -21,18 +23,25 @@ export default async function MenuPage() {
         const photoProduct = section.products.find((p) => p.image_url);
         return {
           title: section.name,
+          sectionId: section.id as string | undefined,
           photo: photoProduct
             ? { src: photoProduct.image_url as string, alt: photoProduct.name }
             : staticFallback.photo,
           items: section.products.map((p) => ({
             name: p.name,
             price: p.price != null ? `${p.price.toFixed(2)} €` : "sur demande",
+            productId: p.id as string | undefined,
           })),
         };
       })
-    : staticMenuCategories;
+    : staticMenuCategories.map((category) => ({
+        ...category,
+        sectionId: undefined as string | undefined,
+        items: category.items.map((item) => ({ ...item, productId: undefined as string | undefined })),
+      }));
 
   return (
+    <Suspense fallback={null}>
     <>
       <section className="bg-ink py-16 text-cream">
         <Container>
@@ -65,11 +74,24 @@ export default async function MenuPage() {
                       className="flex items-baseline justify-between gap-4 border-b border-ink/10 pb-3"
                     >
                       <span className="text-ink/85">{item.name}</span>
-                      <span className="whitespace-nowrap font-display italic text-wine">
-                        {item.price}
+                      <span className="flex items-center gap-2">
+                        <span className="whitespace-nowrap font-display italic text-wine">
+                          {item.price}
+                        </span>
+                        {item.productId && (
+                          <CmsEditPencil payload={{ type: "edit-product", productId: item.productId }} />
+                        )}
                       </span>
                     </li>
                   ))}
+                  {category.sectionId && (
+                    <li>
+                      <CmsAddTile
+                        payload={{ type: "add-product", sectionId: category.sectionId }}
+                        label="+ Ajouter un plat dans cette rubrique"
+                      />
+                    </li>
+                  )}
                 </ul>
               </div>
             </div>
@@ -105,5 +127,6 @@ export default async function MenuPage() {
         </Container>
       </section>
     </>
+    </Suspense>
   );
 }

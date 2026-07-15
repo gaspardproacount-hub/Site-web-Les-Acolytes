@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Container } from "@/components/container";
 import { ContactForm } from "@/components/contact-form";
 import { CtaButton } from "@/components/cta-button";
 import { SitePhoto } from "@/components/site-photo";
 import { SectionHeading } from "@/components/section-heading";
+import { CmsEditPencil } from "@/components/cms-edit";
 import { openingHours as staticOpeningHours, site } from "@/lib/content";
 import { getCmsSiteSettings } from "@/lib/cms";
 
@@ -26,6 +28,7 @@ export default async function ContactPage() {
       : staticOpeningHours;
 
   return (
+    <Suspense fallback={null}>
     <>
       <section className="bg-ink py-16 text-cream">
         <Container>
@@ -42,12 +45,19 @@ export default async function ContactPage() {
         <Container className="grid gap-12 lg:grid-cols-[1fr_1fr]">
           <div className="space-y-8">
             <div>
-              <h2 className="font-display text-2xl italic text-wine">Adresse</h2>
+              <h2 className="flex items-center gap-2 font-display text-2xl italic text-wine">
+                Adresse
+                <CmsEditPencil payload={{ type: "edit-info-field", field: "address" }} />
+              </h2>
               <p className="mt-2 text-ink/80">{address}</p>
               <p className="text-ink/60">{site.addressLine2}</p>
             </div>
             <div>
-              <h2 className="font-display text-2xl italic text-wine">Contact</h2>
+              <h2 className="flex items-center gap-2 font-display text-2xl italic text-wine">
+                Contact
+                <CmsEditPencil payload={{ type: "edit-info-field", field: "phone" }} />
+                <CmsEditPencil payload={{ type: "edit-info-field", field: "email" }} />
+              </h2>
               <p className="mt-2">
                 <a href={phoneHref} className="text-ink/80 hover:text-wine">{phone}</a>
               </p>
@@ -64,7 +74,10 @@ export default async function ContactPage() {
               </a>
             </div>
             <div>
-              <h2 className="font-display text-2xl italic text-wine">Horaires</h2>
+              <h2 className="flex items-center gap-2 font-display text-2xl italic text-wine">
+                Horaires
+                <CmsEditPencil payload={{ type: "edit-info-field", field: "horaires" }} />
+              </h2>
               <ul className="mt-3 max-w-sm space-y-2 text-sm">
                 {openingHours.map((row) => (
                   <li key={row.day} className="flex justify-between gap-4 border-b border-ink/10 pb-2">
@@ -103,5 +116,6 @@ export default async function ContactPage() {
         </Container>
       </section>
     </>
+    </Suspense>
   );
 }

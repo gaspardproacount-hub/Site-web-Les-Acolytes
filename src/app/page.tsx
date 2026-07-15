@@ -1,9 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
 import { Container } from "@/components/container";
 import { CtaButton } from "@/components/cta-button";
 import { SitePhoto } from "@/components/site-photo";
 import { SectionHeading } from "@/components/section-heading";
+import { CmsEditPencil, CmsAddTile } from "@/components/cms-edit";
 import {
   highlights as staticHighlights,
   menuCategories as staticMenuCategories,
@@ -29,8 +31,12 @@ export default async function Home() {
       : staticOpeningHours;
 
   const highlights = cmsHighlights
-    ? cmsHighlights.map((block) => ({ title: block.heading, description: block.body }))
-    : staticHighlights;
+    ? cmsHighlights.map((block) => ({
+        title: block.heading,
+        description: block.body,
+        blockId: block.id as string | undefined,
+      }))
+    : staticHighlights.map((h) => ({ ...h, blockId: undefined as string | undefined }));
 
   const menuPreviewItems = cmsCatalog?.[1]?.products.length
     ? cmsCatalog[1].products
@@ -39,6 +45,7 @@ export default async function Home() {
     : staticMenuCategories[1].items.slice(0, 4);
 
   return (
+    <Suspense fallback={null}>
     <>
       <section className="relative overflow-hidden bg-ink text-cream">
         <Image
@@ -86,11 +93,18 @@ export default async function Home() {
           />
           <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {highlights.map((item) => (
-              <div key={item.title} className="rounded-2xl border border-ink/10 bg-white/60 p-6">
+              <div key={item.title} className="relative rounded-2xl border border-ink/10 bg-white/60 p-6">
+                {item.blockId && (
+                  <CmsEditPencil
+                    payload={{ type: "edit-block", blockId: item.blockId }}
+                    className="absolute right-3 top-3"
+                  />
+                )}
                 <h3 className="font-display text-xl italic text-wine">{item.title}</h3>
                 <p className="mt-3 text-sm leading-relaxed text-ink/70">{item.description}</p>
               </div>
             ))}
+            <CmsAddTile payload={{ type: "add-block" }} label="+ Ajouter un point fort" />
           </div>
         </Container>
       </section>
@@ -194,5 +208,6 @@ export default async function Home() {
         </Container>
       </section>
     </>
+    </Suspense>
   );
 }
