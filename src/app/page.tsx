@@ -5,13 +5,39 @@ import { CtaButton } from "@/components/cta-button";
 import { SitePhoto } from "@/components/site-photo";
 import { SectionHeading } from "@/components/section-heading";
 import {
-  highlights,
-  menuCategories,
-  openingHours,
+  highlights as staticHighlights,
+  menuCategories as staticMenuCategories,
+  openingHours as staticOpeningHours,
   site,
 } from "@/lib/content";
+import { getCmsSiteSettings, getCmsCatalog, getCmsPageBlocks } from "@/lib/cms";
 
-export default function Home() {
+export default async function Home() {
+  const [cmsSettings, cmsCatalog, cmsHighlights] = await Promise.all([
+    getCmsSiteSettings(),
+    getCmsCatalog(),
+    getCmsPageBlocks("accueil"),
+  ]);
+
+  const address = cmsSettings?.address || site.address;
+  const phone = cmsSettings?.phone || site.phone;
+  const phoneHref = cmsSettings?.phone ? "tel:" + cmsSettings.phone.replace(/[^\d+]/g, "") : site.phoneHref;
+  const email = cmsSettings?.email || site.email;
+  const openingHours =
+    cmsSettings?.opening_hours && cmsSettings.opening_hours.length
+      ? cmsSettings.opening_hours.map((row) => ({ day: row.jour, hours: row.horaires || "Fermé" }))
+      : staticOpeningHours;
+
+  const highlights = cmsHighlights
+    ? cmsHighlights.map((block) => ({ title: block.heading, description: block.body }))
+    : staticHighlights;
+
+  const menuPreviewItems = cmsCatalog?.[1]?.products.length
+    ? cmsCatalog[1].products
+        .slice(0, 4)
+        .map((p) => ({ name: p.name, price: p.price != null ? `${p.price.toFixed(2)} €` : "sur demande" }))
+    : staticMenuCategories[1].items.slice(0, 4);
+
   return (
     <>
       <section className="relative overflow-hidden bg-ink text-cream">
@@ -84,7 +110,7 @@ export default function Home() {
               description="Menu du jour dès 15,90 €, plats bistronomiques et options végétariennes, à partager en salle ou sur la terrasse."
             />
             <ul className="mt-8 space-y-3">
-              {menuCategories[1].items.slice(0, 4).map((item) => (
+              {menuPreviewItems.map((item) => (
                 <li key={item.name} className="flex items-baseline justify-between gap-4 border-b border-ink/10 pb-2">
                   <span className="text-ink/85">{item.name}</span>
                   <span className="whitespace-nowrap font-display italic text-wine">{item.price}</span>
@@ -110,18 +136,18 @@ export default function Home() {
             <dl className="mt-8 space-y-4 text-ink/80">
               <div>
                 <dt className="text-xs font-semibold uppercase tracking-widest text-ink/50">Adresse</dt>
-                <dd className="mt-1">{site.address}</dd>
+                <dd className="mt-1">{address}</dd>
               </div>
               <div>
                 <dt className="text-xs font-semibold uppercase tracking-widest text-ink/50">Téléphone</dt>
                 <dd className="mt-1">
-                  <a href={site.phoneHref} className="hover:text-wine">{site.phone}</a>
+                  <a href={phoneHref} className="hover:text-wine">{phone}</a>
                 </dd>
               </div>
               <div>
                 <dt className="text-xs font-semibold uppercase tracking-widest text-ink/50">Email</dt>
                 <dd className="mt-1">
-                  <a href={`mailto:${site.email}`} className="hover:text-wine">{site.email}</a>
+                  <a href={`mailto:${email}`} className="hover:text-wine">{email}</a>
                 </dd>
               </div>
             </dl>

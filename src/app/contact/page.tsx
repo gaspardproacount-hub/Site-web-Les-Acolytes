@@ -4,7 +4,8 @@ import { ContactForm } from "@/components/contact-form";
 import { CtaButton } from "@/components/cta-button";
 import { SitePhoto } from "@/components/site-photo";
 import { SectionHeading } from "@/components/section-heading";
-import { openingHours, site } from "@/lib/content";
+import { openingHours as staticOpeningHours, site } from "@/lib/content";
+import { getCmsSiteSettings } from "@/lib/cms";
 
 export const metadata: Metadata = {
   title: "Infos & contact | Les Acolytes",
@@ -12,7 +13,18 @@ export const metadata: Metadata = {
     "Adresse, horaires et contact du restaurant Les Acolytes à l'Oncopole, Toulouse. Réservez votre table ou écrivez-nous pour vos événements.",
 };
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const cmsSettings = await getCmsSiteSettings();
+
+  const address = cmsSettings?.address || site.address;
+  const phone = cmsSettings?.phone || site.phone;
+  const phoneHref = cmsSettings?.phone ? "tel:" + cmsSettings.phone.replace(/[^\d+]/g, "") : site.phoneHref;
+  const email = cmsSettings?.email || site.email;
+  const openingHours =
+    cmsSettings?.opening_hours && cmsSettings.opening_hours.length
+      ? cmsSettings.opening_hours.map((row) => ({ day: row.jour, hours: row.horaires || "Fermé" }))
+      : staticOpeningHours;
+
   return (
     <>
       <section className="bg-ink py-16 text-cream">
@@ -31,16 +43,16 @@ export default function ContactPage() {
           <div className="space-y-8">
             <div>
               <h2 className="font-display text-2xl italic text-wine">Adresse</h2>
-              <p className="mt-2 text-ink/80">{site.address}</p>
+              <p className="mt-2 text-ink/80">{address}</p>
               <p className="text-ink/60">{site.addressLine2}</p>
             </div>
             <div>
               <h2 className="font-display text-2xl italic text-wine">Contact</h2>
               <p className="mt-2">
-                <a href={site.phoneHref} className="text-ink/80 hover:text-wine">{site.phone}</a>
+                <a href={phoneHref} className="text-ink/80 hover:text-wine">{phone}</a>
               </p>
               <p>
-                <a href={`mailto:${site.email}`} className="text-ink/80 hover:text-wine">{site.email}</a>
+                <a href={`mailto:${email}`} className="text-ink/80 hover:text-wine">{email}</a>
               </p>
               <a
                 href={site.facebook}

@@ -3,7 +3,8 @@ import { Container } from "@/components/container";
 import { CtaButton } from "@/components/cta-button";
 import { SitePhoto } from "@/components/site-photo";
 import { SectionHeading } from "@/components/section-heading";
-import { dessertPhotos, menuCategories, menuNote, site } from "@/lib/content";
+import { dessertPhotos, menuCategories as staticMenuCategories, menuNote, site } from "@/lib/content";
+import { getCmsCatalog } from "@/lib/cms";
 
 export const metadata: Metadata = {
   title: "La carte | Les Acolytes",
@@ -11,7 +12,26 @@ export const metadata: Metadata = {
     "Découvrez la carte du restaurant Les Acolytes à l'Oncopole, Toulouse : menu du jour, entrées, plats et options végétariennes.",
 };
 
-export default function MenuPage() {
+export default async function MenuPage() {
+  const cmsCatalog = await getCmsCatalog();
+
+  const menuCategories = cmsCatalog
+    ? cmsCatalog.map((section, index) => {
+        const staticFallback = staticMenuCategories[index % staticMenuCategories.length];
+        const photoProduct = section.products.find((p) => p.image_url);
+        return {
+          title: section.name,
+          photo: photoProduct
+            ? { src: photoProduct.image_url as string, alt: photoProduct.name }
+            : staticFallback.photo,
+          items: section.products.map((p) => ({
+            name: p.name,
+            price: p.price != null ? `${p.price.toFixed(2)} €` : "sur demande",
+          })),
+        };
+      })
+    : staticMenuCategories;
+
   return (
     <>
       <section className="bg-ink py-16 text-cream">

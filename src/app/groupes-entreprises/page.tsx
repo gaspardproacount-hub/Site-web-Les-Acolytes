@@ -3,7 +3,8 @@ import { Container } from "@/components/container";
 import { CtaButton } from "@/components/cta-button";
 import { SitePhoto } from "@/components/site-photo";
 import { SectionHeading } from "@/components/section-heading";
-import { eventTypes, site } from "@/lib/content";
+import { eventTypes as staticEventTypes, site } from "@/lib/content";
+import { getCmsPageBlocks } from "@/lib/cms";
 
 export const metadata: Metadata = {
   title: "Groupes & entreprises | Les Acolytes",
@@ -11,7 +12,10 @@ export const metadata: Metadata = {
     "Privatisez la salle ou la terrasse des Acolytes pour vos séminaires, cocktails, anniversaires et afterworks, jusqu'à 200 personnes, à l'Oncopole, Toulouse.",
 };
 
-export default function GroupesEntreprisesPage() {
+export default async function GroupesEntreprisesPage() {
+  const cmsBlocks = await getCmsPageBlocks("groupes-entreprises");
+  const eventTypes = cmsBlocks ? cmsBlocks.map((block) => block.heading) : staticEventTypes;
+
   return (
     <>
       <section className="bg-wine py-16 text-cream">
