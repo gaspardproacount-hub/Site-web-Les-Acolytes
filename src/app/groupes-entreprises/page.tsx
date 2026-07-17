@@ -6,7 +6,7 @@ import { SitePhoto } from "@/components/site-photo";
 import { SectionHeading } from "@/components/section-heading";
 import { eventTypes as staticEventTypes, site } from "@/lib/content";
 import { getCmsPageBlocks } from "@/lib/cms";
-import { CmsEditPencil, CmsAddTile } from "@/components/cms-edit";
+import { CmsEditableText, CmsAddTile } from "@/components/cms-edit";
 
 export const metadata: Metadata = {
   title: "Groupes & entreprises | Les Acolytes",
@@ -75,13 +75,15 @@ export default async function GroupesEntreprisesPage() {
                 key={event.label}
                 className="relative rounded-xl border border-ink/10 bg-white/70 p-5 text-center font-medium text-ink/85"
               >
-                {event.blockId && (
-                  <CmsEditPencil
-                    payload={{ type: "edit-block", blockId: event.blockId }}
-                    className="absolute right-2 top-2"
+                {event.blockId ? (
+                  <CmsEditableText
+                    as="span"
+                    value={event.label}
+                    target={{ kind: "block", id: event.blockId, field: "heading" }}
                   />
+                ) : (
+                  event.label
                 )}
-                {event.label}
               </div>
             ))}
             <CmsAddTile payload={{ type: "add-block" }} label="+ Ajouter une formule" />

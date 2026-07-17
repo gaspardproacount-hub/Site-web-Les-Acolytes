@@ -4,7 +4,7 @@ import { Container } from "@/components/container";
 import { CtaButton } from "@/components/cta-button";
 import { SitePhoto } from "@/components/site-photo";
 import { SectionHeading } from "@/components/section-heading";
-import { CmsEditPencil, CmsAddTile } from "@/components/cms-edit";
+import { CmsEditableText, CmsEditPencil, CmsAddTile } from "@/components/cms-edit";
 import { dessertPhotos, menuCategories as staticMenuCategories, menuNote, site } from "@/lib/content";
 import { getCmsCatalog } from "@/lib/cms";
 
@@ -79,7 +79,16 @@ export default async function MenuPage() {
                       key={item.name}
                       className="flex items-baseline justify-between gap-4 border-b border-ink/10 pb-3"
                     >
-                      <span className="text-ink/85">{item.name}</span>
+                      {item.productId ? (
+                        <CmsEditableText
+                          as="span"
+                          value={item.name}
+                          target={{ kind: "product", id: item.productId, field: "name" }}
+                          className="text-ink/85"
+                        />
+                      ) : (
+                        <span className="text-ink/85">{item.name}</span>
+                      )}
                       <span className="flex items-center gap-2">
                         <span className="whitespace-nowrap font-display italic text-wine">
                           {item.price}

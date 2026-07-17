@@ -5,7 +5,7 @@ import { Container } from "@/components/container";
 import { CtaButton } from "@/components/cta-button";
 import { SitePhoto } from "@/components/site-photo";
 import { SectionHeading } from "@/components/section-heading";
-import { CmsEditPencil, CmsAddTile } from "@/components/cms-edit";
+import { CmsEditableText, CmsAddTile } from "@/components/cms-edit";
 import {
   highlights as staticHighlights,
   menuCategories as staticMenuCategories,
@@ -94,14 +94,28 @@ export default async function Home() {
           <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {highlights.map((item) => (
               <div key={item.title} className="relative rounded-2xl border border-ink/10 bg-white/60 p-6">
-                {item.blockId && (
-                  <CmsEditPencil
-                    payload={{ type: "edit-block", blockId: item.blockId }}
-                    className="absolute right-3 top-3"
-                  />
+                {item.blockId ? (
+                  <>
+                    <CmsEditableText
+                      as="h3"
+                      value={item.title}
+                      target={{ kind: "block", id: item.blockId, field: "heading" }}
+                      className="font-display text-xl italic text-wine"
+                    />
+                    <CmsEditableText
+                      as="p"
+                      value={item.description}
+                      target={{ kind: "block", id: item.blockId, field: "body" }}
+                      multiline
+                      className="mt-3 block text-sm leading-relaxed text-ink/70"
+                    />
+                  </>
+                ) : (
+                  <>
+                    <h3 className="font-display text-xl italic text-wine">{item.title}</h3>
+                    <p className="mt-3 text-sm leading-relaxed text-ink/70">{item.description}</p>
+                  </>
                 )}
-                <h3 className="font-display text-xl italic text-wine">{item.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-ink/70">{item.description}</p>
               </div>
             ))}
             <CmsAddTile payload={{ type: "add-block" }} label="+ Ajouter un point fort" />
