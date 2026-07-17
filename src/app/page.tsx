@@ -30,8 +30,14 @@ export default async function Home() {
       ? cmsSettings.opening_hours.map((row) => ({ day: row.jour, hours: row.horaires || "Fermé" }))
       : staticOpeningHours;
 
-  const highlights = cmsHighlights
-    ? cmsHighlights.map((block) => ({
+  const HERO_TITLE = "Un ancien cabaret devenu brasserie de caractère";
+  const HERO_SUBTITLE =
+    "Les Acolytes vous accueillent du lundi au vendredi pour un déjeuner fait maison, le jeudi soir pour l'afterwork, et toute l'année pour vos événements privés — dans un décor atypique et une terrasse ombragée à l'olivier.";
+  const heroBlock = cmsHighlights?.find((b) => b.heading === HERO_TITLE);
+  const highlightBlocks = cmsHighlights?.filter((b) => b.id !== heroBlock?.id);
+
+  const highlights = highlightBlocks?.length
+    ? highlightBlocks.map((block) => ({
         title: block.heading,
         description: block.body,
         blockId: block.id as string | undefined,
@@ -63,15 +69,32 @@ export default async function Home() {
             <span className="text-xs font-semibold uppercase tracking-[0.35em] text-gold">
               Oncopole · Toulouse
             </span>
-            <h1 className="mt-4 font-display text-4xl italic leading-tight sm:text-5xl lg:text-6xl">
-              Un ancien cabaret devenu brasserie de caractère
-            </h1>
-            <p className="mt-6 max-w-lg text-balance text-lg leading-relaxed text-cream/80">
-              Les Acolytes vous accueillent du lundi au vendredi pour un
-              déjeuner fait maison, le jeudi soir pour l&apos;afterwork, et
-              toute l&apos;année pour vos événements privés — dans un décor
-              atypique et une terrasse ombragée à l&apos;olivier.
-            </p>
+            {heroBlock ? (
+              <>
+                <CmsEditableText
+                  as="h1"
+                  value={heroBlock.heading || HERO_TITLE}
+                  target={{ kind: "block", id: heroBlock.id, field: "heading" }}
+                  className="mt-4 block font-display text-4xl italic leading-tight sm:text-5xl lg:text-6xl"
+                />
+                <CmsEditableText
+                  as="p"
+                  value={heroBlock.body || HERO_SUBTITLE}
+                  target={{ kind: "block", id: heroBlock.id, field: "body" }}
+                  multiline
+                  className="mt-6 block max-w-lg text-balance text-lg leading-relaxed text-cream/80"
+                />
+              </>
+            ) : (
+              <>
+                <h1 className="mt-4 font-display text-4xl italic leading-tight sm:text-5xl lg:text-6xl">
+                  {HERO_TITLE}
+                </h1>
+                <p className="mt-6 max-w-lg text-balance text-lg leading-relaxed text-cream/80">
+                  {HERO_SUBTITLE}
+                </p>
+              </>
+            )}
             <div className="mt-8 flex flex-wrap gap-4">
               <CtaButton href={site.reservationUrl} external variant="gold">
                 Réserver une table
