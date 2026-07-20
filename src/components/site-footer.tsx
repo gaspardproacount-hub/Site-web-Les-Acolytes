@@ -10,9 +10,11 @@ const DESCRIPTION =
 export function SiteFooter({
   navBlocks,
   footerBlocks,
+  facebookUrl,
 }: {
   navBlocks?: CmsPageBlock[] | null;
   footerBlocks?: CmsPageBlock[] | null;
+  facebookUrl?: string;
 }) {
   const descriptionBlock = footerBlocks?.[0];
 
@@ -33,7 +35,7 @@ export function SiteFooter({
             <p className="mt-3 text-sm leading-relaxed text-cream/70">{DESCRIPTION}</p>
           )}
           <a
-            href={site.facebook}
+            href={facebookUrl || site.facebook}
             target="_blank"
             rel="noopener noreferrer"
             className="mt-4 inline-block text-sm text-cream/70 underline decoration-gold/50 underline-offset-4 hover:text-gold"

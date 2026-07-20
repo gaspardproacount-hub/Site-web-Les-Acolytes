@@ -25,6 +25,7 @@ export default async function Home() {
   const phone = cmsSettings?.phone || site.phone;
   const phoneHref = cmsSettings?.phone ? "tel:" + cmsSettings.phone.replace(/[^\d+]/g, "") : site.phoneHref;
   const email = cmsSettings?.email || site.email;
+  const reservationUrl = cmsSettings?.social_links.reservation_url || site.reservationUrl;
   const openingHours =
     cmsSettings?.opening_hours && cmsSettings.opening_hours.length
       ? cmsSettings.opening_hours.map((row) => ({ day: row.jour, hours: row.horaires || "Fermé" }))
@@ -96,7 +97,7 @@ export default async function Home() {
               </>
             )}
             <div className="mt-8 flex flex-wrap gap-4">
-              <CtaButton href={site.reservationUrl} external variant="gold">
+              <CtaButton href={reservationUrl} external variant="gold">
                 Réserver une table
               </CtaButton>
               <CtaButton href="/menu" variant="outline">

@@ -9,9 +9,16 @@ import { CmsEditableText } from "@/components/cms-edit";
 import { navLinks, site } from "@/lib/content";
 import type { CmsPageBlock } from "@/lib/cms";
 
-export function SiteHeader({ navBlocks }: { navBlocks?: CmsPageBlock[] | null }) {
+export function SiteHeader({
+  navBlocks,
+  reservationUrl,
+}: {
+  navBlocks?: CmsPageBlock[] | null;
+  reservationUrl?: string;
+}) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const bookingUrl = reservationUrl || site.reservationUrl;
 
   return (
     <header className="sticky top-0 z-50 border-b border-ink/10 bg-cream/95 backdrop-blur">
@@ -24,7 +31,7 @@ export function SiteHeader({ navBlocks }: { navBlocks?: CmsPageBlock[] | null })
         </Link>
 
         <div className="flex items-center gap-4">
-          <CtaButton href={site.reservationUrl} external variant="primary" className="hidden sm:inline-flex">
+          <CtaButton href={bookingUrl} external variant="primary" className="hidden sm:inline-flex">
             Réserver une table
           </CtaButton>
 
@@ -68,7 +75,7 @@ export function SiteHeader({ navBlocks }: { navBlocks?: CmsPageBlock[] | null })
               );
             })}
             <CtaButton
-              href={site.reservationUrl}
+              href={bookingUrl}
               external
               variant="primary"
               className="mt-2 w-fit sm:hidden"

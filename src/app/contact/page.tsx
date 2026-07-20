@@ -22,6 +22,8 @@ export default async function ContactPage() {
   const phone = cmsSettings?.phone || site.phone;
   const phoneHref = cmsSettings?.phone ? "tel:" + cmsSettings.phone.replace(/[^\d+]/g, "") : site.phoneHref;
   const email = cmsSettings?.email || site.email;
+  const facebook = cmsSettings?.social_links.facebook || site.facebook;
+  const reservationUrl = cmsSettings?.social_links.reservation_url || site.reservationUrl;
   const openingHours =
     cmsSettings?.opening_hours && cmsSettings.opening_hours.length
       ? cmsSettings.opening_hours.map((row) => ({ day: row.jour, hours: row.horaires || "Fermé" }))
@@ -65,13 +67,14 @@ export default async function ContactPage() {
                 <a href={`mailto:${email}`} className="text-ink/80 hover:text-wine">{email}</a>
               </p>
               <a
-                href={site.facebook}
+                href={facebook}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-2 inline-block text-ink/80 underline decoration-wine/40 underline-offset-4 hover:text-wine"
               >
                 Facebook — @lesacolytes31
               </a>
+              <CmsEditPencil payload={{ type: "edit-info-field", field: "facebook" }} className="ml-2 inline-flex" />
             </div>
             <div>
               <h2 className="flex items-center gap-2 font-display text-2xl italic text-wine">
@@ -87,7 +90,7 @@ export default async function ContactPage() {
                 ))}
               </ul>
             </div>
-            <CtaButton href={site.reservationUrl} external variant="primary">
+            <CtaButton href={reservationUrl} external variant="primary">
               Réserver une table en ligne
             </CtaButton>
           </div>

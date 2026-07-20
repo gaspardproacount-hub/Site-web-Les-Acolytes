@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Fraunces, Inter } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
-import { getCmsPageBlocks } from "@/lib/cms";
+import { getCmsPageBlocks, getCmsSiteSettings } from "@/lib/cms";
 
 const fraunces = Fraunces({
   variable: "--font-fraunces",
@@ -28,10 +29,12 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [navBlocks, footerBlocks] = await Promise.all([
+  const [navBlocks, footerBlocks, cmsSettings] = await Promise.all([
     getCmsPageBlocks("navigation"),
     getCmsPageBlocks("footer"),
+    getCmsSiteSettings(),
   ]);
+  const reservationUrl = cmsSettings?.social_links.reservation_url;
 
   return (
     <html
@@ -39,9 +42,17 @@ export default async function RootLayout({
       className={`${fraunces.variable} ${inter.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-cream font-sans text-ink">
-        <SiteHeader navBlocks={navBlocks} />
+        <Suspense fallback={null}>
+          <SiteHeader navBlocks={navBlocks} reservationUrl={reservationUrl} />
+        </Suspense>
         <main className="flex-1">{children}</main>
-        <SiteFooter navBlocks={navBlocks} footerBlocks={footerBlocks} />
+        <Suspense fallback={null}>
+          <SiteFooter
+            navBlocks={navBlocks}
+            footerBlocks={footerBlocks}
+            facebookUrl={cmsSettings?.social_links.facebook}
+          />
+        </Suspense>
       </body>
     </html>
   );

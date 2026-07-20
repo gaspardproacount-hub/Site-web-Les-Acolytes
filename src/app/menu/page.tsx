@@ -6,7 +6,7 @@ import { SitePhoto } from "@/components/site-photo";
 import { SectionHeading } from "@/components/section-heading";
 import { CmsEditableText, CmsEditPencil, CmsAddTile } from "@/components/cms-edit";
 import { dessertPhotos, menuCategories as staticMenuCategories, menuNote, site } from "@/lib/content";
-import { getCmsCatalog } from "@/lib/cms";
+import { getCmsCatalog, getCmsSiteSettings } from "@/lib/cms";
 
 export const metadata: Metadata = {
   title: "La carte | Les Acolytes",
@@ -21,7 +21,8 @@ function parsePriceNumber(price: string): number | undefined {
 }
 
 export default async function MenuPage() {
-  const cmsCatalog = await getCmsCatalog();
+  const [cmsCatalog, cmsSettings] = await Promise.all([getCmsCatalog(), getCmsSiteSettings()]);
+  const reservationUrl = cmsSettings?.social_links.reservation_url || site.reservationUrl;
 
   const menuCategories = cmsCatalog
     ? cmsCatalog.map((section, index) => {
@@ -143,7 +144,7 @@ export default async function MenuPage() {
               {site.phone}
             </a>.
           </p>
-          <CtaButton href={site.reservationUrl} external variant="primary">
+          <CtaButton href={reservationUrl} external variant="primary">
             Réserver une table
           </CtaButton>
         </Container>
