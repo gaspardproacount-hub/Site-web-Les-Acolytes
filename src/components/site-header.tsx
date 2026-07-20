@@ -5,9 +5,11 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Container } from "@/components/container";
 import { CtaButton } from "@/components/cta-button";
+import { CmsEditableText } from "@/components/cms-edit";
 import { navLinks, site } from "@/lib/content";
+import type { CmsPageBlock } from "@/lib/cms";
 
-export function SiteHeader() {
+export function SiteHeader({ navBlocks }: { navBlocks?: CmsPageBlock[] | null }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
@@ -43,8 +45,9 @@ export function SiteHeader() {
       {open && (
         <div className="border-t border-ink/10 bg-cream">
           <Container className="flex flex-col gap-4 py-6">
-            {navLinks.map((link) => {
+            {navLinks.map((link, i) => {
               const active = pathname === link.href;
+              const block = navBlocks?.[i];
               return (
                 <Link
                   key={link.href}
@@ -52,7 +55,15 @@ export function SiteHeader() {
                   onClick={() => setOpen(false)}
                   className={`text-base font-medium ${active ? "text-wine" : "text-ink/80"}`}
                 >
-                  {link.label}
+                  {block ? (
+                    <CmsEditableText
+                      as="span"
+                      value={block.heading || link.label}
+                      target={{ kind: "block", id: block.id, field: "heading" }}
+                    />
+                  ) : (
+                    link.label
+                  )}
                 </Link>
               );
             })}
